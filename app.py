@@ -1,5 +1,7 @@
 import streamlit as st
 import math
+import numpy as np
+import matplotlib.pyplot as plt
 
 # Scientific operations
 def add(x, y):
@@ -73,8 +75,8 @@ def main():
     """, unsafe_allow_html=True)
 
     # Title with styling
-    st.markdown("<h1 class='title'>Scientific Calculator</h1>", unsafe_allow_html=True)
-    st.write("An enhanced, user-friendly scientific calculator powered by **Streamlit**.")
+    st.markdown("<h1 class='title'>Scientific Calculator with Plotting</h1>", unsafe_allow_html=True)
+    st.write("An enhanced scientific calculator with function plotting, powered by **Streamlit**.")
 
     # Input fields
     col1, col2 = st.columns(2)
@@ -112,8 +114,8 @@ def main():
     with col4:
         fact_clicked = st.button("n! Factorial")
 
-    # Trigonometric operations
-    st.markdown("**Trigonometric Functions**")
+    # Trigonometric operations with plot buttons
+    st.markdown("**Trigonometric Functions with Plotting**")
     col1, col2, col3 = st.columns(3)
     with col1:
         sin_clicked = st.button("sin")
@@ -148,10 +150,13 @@ def main():
     # Trigonometric functions
     elif sin_clicked:
         result = sin(num1)
+        plot_function(np.sin, "Sine Wave", num1)
     elif cos_clicked:
         result = cos(num1)
+        plot_function(np.cos, "Cosine Wave", num1)
     elif tan_clicked:
         result = tan(num1)
+        plot_function(np.tan, "Tangent Wave", num1)
 
     # Display the result
     if result is not None:
@@ -161,9 +166,29 @@ def main():
     st.markdown("""
         <hr>
         <footer style='text-align: center;'>
-            <small>Made By Zunorain❤️... using Streamlit</small>
+            <small>Made with ❤️ using Streamlit</small>
         </footer>
     """, unsafe_allow_html=True)
+
+def plot_function(func, title, angle=None):
+    """Plot a trigonometric function (sin, cos, tan) for visualization"""
+    st.markdown(f"### Plotting: {title}")
+    x = np.linspace(-2 * np.pi, 2 * np.pi, 500)
+    y = func(x)
+    
+    # Create the plot
+    fig, ax = plt.subplots()
+    ax.plot(x, y, label=f"{title}")
+    
+    # If angle provided, plot a specific point
+    if angle is not None:
+        angle_rad = math.radians(angle)
+        ax.plot(angle_rad, func(angle_rad), 'ro', label=f'Angle: {angle}°')
+
+    ax.legend(loc="upper right")
+    ax.axhline(0, color='black',linewidth=0.5)
+    ax.axvline(0, color='black',linewidth=0.5)
+    st.pyplot(fig)
 
 if __name__ == '__main__':
     main()
