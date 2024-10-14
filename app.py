@@ -194,10 +194,17 @@
 #     main()
 
 
+
+
+
 import streamlit as st
 import math
 import numpy as np
 import matplotlib.pyplot as plt
+
+# Global variables for the current input and result
+current_input = ""
+current_result = None
 
 # Scientific operations
 def add(x, y):
@@ -238,6 +245,8 @@ def factorial(x):
 
 # Streamlit app
 def main():
+    global current_input, current_result
+    
     # Custom CSS for scientific calculator look
     st.markdown("""
         <style>
@@ -260,6 +269,7 @@ def main():
             font-size: 18px;
             border-radius: 8px;
             padding: 10px;
+            margin: 2px;
         }
         .result-box {
             background-color: #2d3436;
@@ -275,9 +285,14 @@ def main():
 
     # Title with styling
     st.markdown("<h1 class='title'>Scientific Calculator</h1>", unsafe_allow_html=True)
-    
-    # Display for results
-    st.markdown("<div class='result-box'>0</div>", unsafe_allow_html=True)
+
+    # Display for the current input/result
+    if current_result is not None:
+        display_text = str(current_result)
+    else:
+        display_text = current_input if current_input else "0"
+        
+    st.markdown(f"<div class='result-box'>{display_text}</div>", unsafe_allow_html=True)
 
     # Layout for calculator buttons
     col1, col2, col3, col4 = st.columns(4)
@@ -285,76 +300,106 @@ def main():
     # Numeric keypad
     with col1:
         if st.button('7'):
-            pass
+            current_input += '7'
         if st.button('4'):
-            pass
+            current_input += '4'
         if st.button('1'):
-            pass
+            current_input += '1'
         if st.button('0'):
-            pass
+            current_input += '0'
 
     with col2:
         if st.button('8'):
-            pass
+            current_input += '8'
         if st.button('5'):
-            pass
+            current_input += '5'
         if st.button('2'):
-            pass
+            current_input += '2'
         if st.button('.'):
-            pass
+            current_input += '.'
 
     with col3:
         if st.button('9'):
-            pass
+            current_input += '9'
         if st.button('6'):
-            pass
+            current_input += '6'
         if st.button('3'):
-            pass
+            current_input += '3'
         if st.button('='):
-            pass
+            calculate()
 
     # Operations
     with col4:
         if st.button('+'):
-            pass
+            current_input += '+'
         if st.button('-'):
-            pass
+            current_input += '-'
         if st.button('*'):
-            pass
+            current_input += '*'
         if st.button('/'):
-            pass
+            current_input += '/'
 
     # Scientific functions in another row
     col1, col2, col3, col4 = st.columns(4)
 
     with col1:
         if st.button('sin'):
-            pass
+            apply_scientific_function('sin')
     with col2:
         if st.button('cos'):
-            pass
+            apply_scientific_function('cos')
     with col3:
         if st.button('tan'):
-            pass
+            apply_scientific_function('tan')
     with col4:
         if st.button('log'):
-            pass
+            apply_scientific_function('log')
 
     # Additional scientific buttons
     col1, col2, col3, col4 = st.columns(4)
 
     with col1:
         if st.button('^ Power'):
-            pass
+            current_input += '**'
     with col2:
         if st.button('√ Square Root'):
-            pass
+            apply_scientific_function('sqrt')
     with col3:
         if st.button('n! Factorial'):
-            pass
+            apply_scientific_function('factorial')
     with col4:
-        if st.button('Plot'):
-            pass
+        if st.button('Clear'):
+            current_input = ""
+            current_result = None
+
+# Function to evaluate basic expressions
+def calculate():
+    global current_input, current_result
+    try:
+        current_result = eval(current_input)
+        current_input = ""
+    except Exception as e:
+        current_result = "Error"
+
+# Function to apply scientific functions
+def apply_scientific_function(func_name):
+    global current_input, current_result
+    try:
+        if func_name == 'sin':
+            current_result = sin(float(current_input))
+        elif func_name == 'cos':
+            current_result = cos(float(current_input))
+        elif func_name == 'tan':
+            current_result = tan(float(current_input))
+        elif func_name == 'log':
+            current_result = log(float(current_input))
+        elif func_name == 'sqrt':
+            current_result = sqrt(float(current_input))
+        elif func_name == 'factorial':
+            current_result = factorial(int(current_input))
+        current_input = ""
+    except Exception as e:
+        current_result = "Error"
 
 if __name__ == '__main__':
     main()
