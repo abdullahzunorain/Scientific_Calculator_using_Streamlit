@@ -166,7 +166,7 @@ def main():
     st.markdown("""
         <hr>
         <footer style='text-align: center;'>
-            <small>Made with ❤️ using Streamlit</small>
+            <small>Made By Zunorain... ❤️ using Streamlit</small>
         </footer>
     """, unsafe_allow_html=True)
 
